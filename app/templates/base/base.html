@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TK Airline</title>
+
+    <link href="{{ url_for('static', filename='images/logo2.png') }}" rel="shortcut icon" type="image/icon" />
+
+    <link href="https://fonts.googleapis.com/css?family=Rufina:400,700" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet" />
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hover-min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootsnav.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}"/>
+
+</head>
+<body>
+    {% block header %}
+        {% include 'base/header.html' %}
+    {% endblock %}
+
+    {% block banner %}
+        {% include 'base/banner.html' %}
+    {% endblock %}
+
+    {% block search %}
+        {% include 'base/search.html' %}
+    {% endblock %}
+
+    {% block slogan %}
+        {% include 'base/slogan.html' %}
+    {% endblock %}
+
+    {% block top_destination %}
+        {% include 'base/top-destination.html' %}
+    {% endblock %}
+
+    {% block packages_combo %}
+        {% include 'base/packages-combo.html' %}
+    {% endblock %}
+
+    {% block event %}
+        {% include 'base/experience.html' %}
+    {% endblock %}
+
+    {% block blog %}
+        {% include 'base/blog.html' %}
+    {% endblock %}
+
+    {% block footer %}
+        {% include 'base/footer.html' %}
+    {% endblock %}
+
+
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootsnav.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.filterizr.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.counterup.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/waypoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.sticky.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/datepicker.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/wow.min.js') }}"></script>
+    <script>
+        new WOW().init();
+    </script>
+
+</body>
+</html>

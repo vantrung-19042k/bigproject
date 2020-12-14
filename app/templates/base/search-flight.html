@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tìm kiếm chuyến bay</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            rel="stylesheet" />
+</head>
+<body>
+    <h1 class="text-center">Tìm kiếm chuyến bay</h1>
+
+    <div class="container">
+        <form>
+            <div class="row">
+                <div class="col-md-6">
+                    <input class="form-control" type="text" placeholder="Điểm đi" name="diem_di"/>
+                </div>
+                 <div class="col-md-6">
+                    <input class="form-control" type="text" placeholder="Điểm đến" name="diem_den"/>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" type="date" placeholder="Ngày đi" name="ngay_di"/>
+                </div>
+            </div>
+            <button class="btn btn-danger">Tìm kiếm</button>
+        </form>
+
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>Diem Den</th>
+                <td>Diem Di</td>
+                <td>Ngay Di</td>
+                <td>Ngay Den</td>
+                <td></td>
+            </tr>
+            {% if flights %}
+                {% for f in flights %}
+                <tr>
+                    <td></td>
+                    <td>{{ f.departure_airport }}</td>
+                    <td>{{ f.arrival_airport }}</td>
+                    <td>{{ f.departure_day}}</td>
+                    <td>{{ f.arrival_day }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+
+</body>
+</html>
