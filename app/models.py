@@ -8,8 +8,9 @@ from flask_login import UserMixin
 
 # User role
 class UserRole(TypeEnum):
-    EMPLOYEE = 1
-    ADMIN = 2
+    CUSTOMER = 1
+    EMPLOYEE = 2
+    ADMIN = 3
 
 
 # model luu tru thong tin user
@@ -23,12 +24,12 @@ class User(db.Model, UserMixin):
     avatar = Column(String(100), nullable=True)
     active = Column(Boolean, default=True)
     joined_date = Column(Date, default=datetime.now())
-    user_role = Column(Enum(UserRole), default=UserRole.EMPLOYEE)
+    user_role = Column(Enum(UserRole), default=UserRole.CUSTOMER)
 
     employee = relationship('Employee', backref='user', lazy=True, uselist=False)
 
     def __str__(self):
-        return self.name
+        return self.username
 
 
 # <---------------------------flight management system------------------------------------>
@@ -63,7 +64,6 @@ class Plane(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
     manufacturer = Column(String(50), nullable=False)
-    size = Column(String(50), nullable=True)
 
     amount_seat_1 = Column(Integer, nullable=False)
     amount_seat_2 = Column(Integer, nullable=False)
@@ -72,7 +72,7 @@ class Plane(db.Model):
     flights = relationship('Flight', backref='plane', lazy=True)
 
     def __str__(self):
-        return self.name
+        return str('%s' + 'Mã số: %s', self.name, )
 
 
 # management airport
@@ -81,8 +81,22 @@ class Airport(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
     address = Column(String(50), nullable=False)
-    acreage = Column(String(50), nullable=False)
+    # acreage = Column(String(50), nullable=False)
     status = Column(String(50), nullable=False)
+
+    def __str__(self):
+        return self.name
+
+
+# san bay trung gian
+class IntermediateAirport(db.Model):
+    __tablename__ = 'intermediate_airport'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(50), nullable=False)
+    address = Column(String(50), nullable=False)
+    status = Column(String(50), nullable=False)
+
+    flights = relationship('Flight', backref='intermediate_airport', lazy=True)
 
     def __str__(self):
         return self.name
@@ -95,12 +109,12 @@ class Flight(db.Model):
     name = Column(String(50), nullable=False)
 
     departure_day = Column(Date, nullable=False)
-    arrival_day = Column(Date, nullable=False)
     flight_time = Column(String(50), nullable=False)
 
     plane_id = Column(Integer, ForeignKey(Plane.id), nullable=False)
     departure_airport_id = Column(Integer, ForeignKey(Airport.id), nullable=False)
     arrival_airport_id = Column(Integer, ForeignKey(Airport.id), nullable=False)
+    intermediate_airport_id = Column(Integer, ForeignKey(IntermediateAirport.id), nullable=False)
 
     departure_airport = relationship('Airport', foreign_keys=[departure_airport_id])
     arrival_airport = relationship('Airport', foreign_keys=[arrival_airport_id])

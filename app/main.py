@@ -2,11 +2,9 @@ import hashlib
 
 from flask import render_template, request, redirect
 from flask_login import login_user
-from sqlalchemy import and_, or_
 
 from app.models import *
 from app import app, login, admins, utils
-from sqlalchemy.orm import aliased
 
 
 @app.route('/')
@@ -19,14 +17,43 @@ def user_load(user_id):
     return User.query.get(user_id)
 
 
-@app.route('/login')
-def login():
+@app.route('/login-user', methods=['get', 'post'])
+def login_users():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password', '')
+        password = hashlib.md5(password.encode('utf-8')).hexdigest()
+
+        user = User.query.filter(User.username == username,
+                                 User.password == password).first()
+
+        if user:
+            login_user(user=user)
+            return redirect('/admin')
+    elif request.method == 'GET':
+        print(request.url)
+        return render_template('base/login-cus.html')
+
     return render_template('base/login-cus.html')
 
 
-@app.route('/register')
-def register():
-    return render_template('base/registration.html')
+@app.route('/register-user', methods=['get', 'post'])
+def register_user():
+    err_msg = ''
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        username = request.form.get('username')
+        password = request.form.get('password', '').strip()
+        confirm_password = request.form.get('confirm_password', '').strip()
+
+        if password == confirm_password:
+            if utils.add_user(name=name, email=email, username=username,
+                              password=password):
+                return redirect('/admin')
+        else:
+            err_msg = "Mật khẩu không khớp, vui lòng thử lại!"
+    return render_template('base/registration.html', err_msg=err_msg)
 
 
 # xu ly login
@@ -46,23 +73,22 @@ def login_admin():
     return redirect('/admin')
 
 
+# tìm kiềm chuyến bay
 @app.route('/search-flight')
 def search_flight():
-    departure_airport = aliased(Airport)
-    arrival_airport = aliased(Airport)
+    msg = ''
+    flights = None
 
     diem_di = request.args.get("diem_di", 0)
     diem_den = request.args.get("diem_den", 0)
     ngay_di = request.args.get("ngay_di", 0)
 
-    # flights = utils.read_flight(ngay_di=ngay_di)
+    if diem_di and diem_den and ngay_di:
+        flights = utils.read_flight(diem_di=diem_di, diem_den=diem_den, ngay_di=ngay_di)
+    else:
+        msg = "Vui lòng nhập đầy đủ thông tin"
 
-    flights = Flight.query.join(departure_airport, Flight.departure_airport_id == departure_airport.id) \
-        .join(arrival_airport, Flight.arrival_airport_id == arrival_airport.id) \
-        .filter(and_(departure_airport.address.contains(diem_di), arrival_airport.address.contains(diem_den),
-                     Flight.departure_day.contains(ngay_di))).all()
-
-    return render_template('base/search-flight.html', flights=flights)
+    return render_template('base/search-flight.html', flights=flights, msg=msg)
 
 
 if __name__ == '__main__':

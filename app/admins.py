@@ -7,7 +7,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin import BaseView, expose
 
 from app.models import User, Customer, Employee, \
-    Plane, Flight, AirTicket, Airport
+    Plane, Flight, AirTicket, Airport, IntermediateAirport
 
 
 class UserView(ModelView):
@@ -16,9 +16,9 @@ class UserView(ModelView):
     can_export = True
     can_delete = False
     column_display_pk = True
-    form_extra_fields = {
-        "password": PasswordField("Password", validators=[validators.data_required(),
-                                                          validators.length(min=8, max=100)])}
+    # form_extra_fields = {
+    #     "password": PasswordField("Password", validators=[validators.data_required(),
+    #                                                       validators.length(min=8, max=100)])}
 
     # def is_accessible(self):
     #     return current_user.is_authenticated
@@ -37,15 +37,19 @@ class SubModelView(ModelView):
 
 
 class CustomerView(SubModelView):
-    column_labels = dict(name='Tên', phone='SĐT', identity_card='CMND', address='Địa chỉ')
+    column_labels = dict(name='Tên', phone='SĐT', identity_card='CMND', address='Địa chỉ', airticket='Vé')
 
 
 class EmployeeView(SubModelView):
-    column_labels = dict(name='Tên', position='Chức vụ', phone='SĐT', address='Địa chỉ')
+    column_labels = dict(name='Tên', position='Chức vụ', phone='SĐT', address='Địa chỉ', airticket='Vé')
 
 
 class AirportView(SubModelView):
     column_labels = dict(name='Tên', address='Địa chỉ', acreage='Diện tích', status='Trạng thái')
+
+
+class IntermediateAirportView(SubModelView):
+    column_labels = dict(name='Tên', address='Địa chỉ', acreage='Diện tích', status='Trạng thái', flights='Chuyến bay')
 
 
 class PlaneView(SubModelView):
@@ -57,11 +61,13 @@ class PlaneView(SubModelView):
 class FlightView(SubModelView):
     column_labels = dict(name='Tên', departure_day='Ngày đi', arrival_day='Ngày đến',
                          flight_time='Thời gian bay', departure_airport='Sân bay đi',
-                         arrival_airport='Sân bay đến', plane='Máy bay', air_tickets='Vé')
+                         arrival_airport='Sân bay đến', plane='Máy bay', air_tickets='Vé',
+                         intermediate_airport='Sân bay trung gian')
 
 
 class TicketView(SubModelView):
-    column_labels = dict(type='Loại vé', price='Giá bán', date='Ngày xuất vé', flight='Chuyến bay')
+    column_labels = dict(type='Loại vé', price='Giá bán', date='Ngày xuất vé', flight='Chuyến bay',
+                         customer='Khách hàng', employee='Nhân viên')
 
 
 class SeatView(SubModelView):
@@ -71,6 +77,7 @@ class SeatView(SubModelView):
 admin.add_view(CustomerView(Customer, db.session, name='Khách hàng', category='Quản lý người dùng'))
 admin.add_view(EmployeeView(Employee, db.session, name='Nhân viên', category='Quản lý người dùng'))
 admin.add_view(AirportView(Airport, db.session, name='Sân bay', category='Quản lý sân bay'))
+admin.add_view(IntermediateAirportView(IntermediateAirport, db.session, name='Sân bay trung gian', category='Quản lý sân bay'))
 admin.add_view(PlaneView(Plane, db.session, name='Máy bay', category='Quản lý sân bay'))
 admin.add_view(FlightView(Flight, db.session, name='Chuyến bay', category='Quản lý chuyến bay'))
 admin.add_view(TicketView(AirTicket, db.session, name='Vé', category='Quản lý chuyến bay'))
