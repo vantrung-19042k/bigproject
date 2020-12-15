@@ -72,7 +72,7 @@ class Plane(db.Model):
     flights = relationship('Flight', backref='plane', lazy=True)
 
     def __str__(self):
-        return str('%s' + 'Mã số: %s', self.name, )
+        return self.name
 
 
 # management airport
