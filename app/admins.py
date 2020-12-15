@@ -20,8 +20,8 @@ class UserView(ModelView):
     #     "password": PasswordField("Password", validators=[validators.data_required(),
     #                                                       validators.length(min=8, max=100)])}
 
-    # def is_accessible(self):
-    #     return current_user.is_authenticated
+    def is_accessible(self):
+        return current_user.is_authenticated
 
 
 class SubModelView(ModelView):
@@ -32,8 +32,8 @@ class SubModelView(ModelView):
 
     # kiem tra trang thai dang nhap cua user
     # neu đã đăng nhập mới hiển thị các view
-    # def is_accessible(self):
-    #     return current_user.is_authenticated
+    def is_accessible(self):
+        return current_user.is_authenticated
 
 
 class CustomerView(SubModelView):
@@ -93,8 +93,8 @@ class Contact(BaseView):
 
     # kiem tra trang thai dang nhap cua user
     # neu đã đăng nhập mới hiển thị các view
-    # def is_accessible(self):
-    #     return current_user.is_authenticated
+    def is_accessible(self):
+        return current_user.is_authenticated
 
 
 admin.add_view(Contact(name="Contact"))
