@@ -1,52 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Tìm kiếm chuyến bay</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-            rel="stylesheet" />
-</head>
+{% extends 'base/base.html' %}
+
 <body>
-    <h1 class="text-center">Tìm kiếm chuyến bay</h1>
+    {% block header %}
+        {% include 'base/header.html' %}
+    {% endblock %}
 
-    <div class="container">
-        <form>
-            <div class="row">
-                <div class="col-md-6">
-                    <input class="form-control" type="text" placeholder="Điểm đi" name="diem_di"/>
-                </div>
-                 <div class="col-md-6">
-                    <input class="form-control" type="text" placeholder="Điểm đến" name="diem_den"/>
-                </div>
-                <div class="col-md-6">
-                    <input class="form-control" type="date" placeholder="Ngày đi" name="ngay_di"/>
-                </div>
-            </div>
-            <button class="btn btn-danger">Tìm kiếm</button>
-        </form>
+    {% block banner %}
+        {% include 'base/banner.html' %}
+    {% endblock %}
 
-        <table class="table">
-            <tr>
-                <th></th>
-                <th>Diem Den</th>
-                <td>Diem Di</td>
-                <td>Ngay Di</td>
-                <td>Ngay Den</td>
-                <td></td>
-            </tr>
-            {% if flights %}
-                {% for f in flights %}
-                <tr>
-                    <td></td>
-                    <td>{{ f.departure_airport }}</td>
-                    <td>{{ f.arrival_airport }}</td>
-                    <td>{{ f.departure_day}}</td>
-                    <td>{{ f.arrival_day }}</td>
-                </tr>
-                {% endfor %}
-            {% endif %}
-        </table>
-    </div>
+    {% block search %}
+        {% include 'base/search-tab.html' %}
+    {% endblock %}
 
+    {% block slogan %}
+    {% endblock %}
+
+    {% block top_destination %}
+    {% endblock %}
+
+    {% block packages_combo %}
+    {% endblock %}
+
+    {% block event %}
+    {% endblock %}
+
+    {% block blog %}
+    {% endblock %}
+
+    {% block footer %}
+        {% include 'base/footer.html' %}
+    {% endblock %}
 </body>
-</html>
