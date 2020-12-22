@@ -1,0 +1,17 @@
+#color-text{
+    text-decoration: none !important;
+    color: black;
+    text-align: right;
+    padding-left: 20px;
+}
+
+#backcolor-dropdown{
+    background-color: white;
+}
+
+#dropdownMenuLink{
+    font-size: 18px;
+    font-weight: normal;
+    font-family: Tahoma;
+    background-color: #0e90d2;
+}
