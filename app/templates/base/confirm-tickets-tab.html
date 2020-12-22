@@ -1,0 +1,33 @@
+<h2 class="text-center text-">Xác nhận đặt vé</h2>
+
+<form action="{{ url_for('confirm_ticket') }}", method="post">
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th class="text-center">Mã phiếu đặt chỗ</th>
+            <th class="text-center">Loại vé</th>
+            <th class="text-center">Giá</th>
+            <th class="text-center">Mã chuyến bay</th>
+            <th class="text-center">Ngày đi</th>
+            <th class="text-center">Giờ bay</th>
+            <th class="text-center">Tên khách hàng</th>
+            <th class="text-center">SĐT</th>
+        </tr>
+        {% if book_ticket %}
+            {% for b in book_ticket %}
+                {% if b.status == False %}
+                    <tr>
+                        <td class="text-center">{{ b.id_book_ticket }}</td>
+                        <td class="text-center">{{ b.type }}</td>
+                        <td class="text-center">{{ b.price }}</td>
+                        <td class="text-center">{{ b.id_flight }}</td>
+                        <td class="text-center">{{ b.departure_day}}</td>
+                        <td class="text-center">{{ b.flight_time }}</td>
+                        <td class="text-center">{{ b.name }}</td>
+                        <td class="text-center">{{ b.phone }}</td>
+                        <td><button class="btn btn-danger" value="{{ b.id_book_ticket }}" name="btn-confirm-ticket">Xác nhận</button></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </table>
+</form>

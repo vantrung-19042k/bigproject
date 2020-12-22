@@ -159,7 +159,10 @@ def read_data_report_month():
         .filter(extract('month', AirTicket.date) == 12) \
         .add_columns(func.count(AirTicket.id).label('SoVe'),
                      func.sum(AirTicket.price).label('DoanhThu'),
-                     Flight.id) \
+                     Flight.id,
+                     Flight.name,
+                     Flight.flight_time,
+                     Flight.departure_day) \
         .group_by(Flight.id) \
         .all()
 

@@ -196,20 +196,20 @@ def confirm_ticket():
     return render_template('base/confirm-tickets.html', book_ticket=book_ticket)
 
 
-@app.route('/report-month')
-def report_month():
-
-    report_month = utils.read_data_report_month()
-
-    return render_template('base/report-month.html', report_month=report_month)
-
-
-@app.route('/report-year')
-def report_year():
-
-    report_year = utils.read_data_report_year()
-
-    return render_template('base/report-year.html', report_year=report_year)
+# @app.route('/report-month')
+# def report_month():
+#
+#     report_month = utils.read_data_report_month()
+#
+#     return render_template('base/report-month.html', report_month=report_month)
+#
+#
+# @app.route('/report-year')
+# def report_year():
+#
+#     report_year = utils.read_data_report_year()
+#
+#     return render_template('base/report-year.html', report_year=report_year)
 
 
 if __name__ == '__main__':

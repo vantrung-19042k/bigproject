@@ -1,41 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Báo cáo năm</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="{{ url_for('static', filename='Chart.min.js') }}"></script>
-</head>
-<body>
-    <h1>Báo cáo năm</h1>
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <script src="{{ url_for('static', filename='Chart.min.js') }}">
+    </script>
+
+    <h2 class="text-center">Báo cáo năm</h2>
     </br>
-    <table class="table">
+    <table class="table table-bordered table-hover">
             <tr>
-                <th></th>
-                <th>Số thứ tự</th>
-                <th>Tháng</th>
-                <th>Số chuyến bay</th>
-                <th>Tỷ lệ</th>
-                <th>Doanh thu</th>
+                <th class="text-center">Tháng</th>
+                <th class="text-center">Số chuyến bay</th>
+                <th class="text-center">Doanh thu</th>
             </tr>
             {% if report_year %}
                     {% for r in report_year %}
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td>{{ r.thang }}</td>
-                        <td>{{ r.SoChuyenBay }}</td>
-                        <td></td>
-                        <td>{{ r.DoanhThu }}</td>
+                        <td class="text-center">{{ r.thang }}</td>
+                        <td class="text-center">{{ r.SoChuyenBay }}</td>
+                        <td class="text-center">{{ r.DoanhThu }}</td>
                     </tr>
                     {% endfor %}
                 {% endif %}
         </table>
 
-<h1>Biếu đồ doanh thu</h1>
+    <div><br></div>
+
+    <h2 class="text-center">Biếu đồ doanh thu</h2>
     <br>
     <!-- bar chart canvas element -->
-    <canvas id="myChart" width="1000" height="800"></canvas>
+    <canvas class="center-block" id="myChart" width="1100" height="800"></canvas>
+
+    <br>
+    <br>
+    <br>
+    <br>
 
 <script>
 // Global parameters:
@@ -84,6 +82,7 @@ var myChart = new Chart(ctx, {
   type: 'line',
   data: chartData,
 });
+
 </script>
-</body>
-</html>
+
+{% endblock %}
