@@ -4,7 +4,7 @@
 {% endif %}
 
 <div class="container">
-    <form>
+    <form action="{{ url_for('search_flight') }}">
         <div class="row">
             <div class="col-md-6">
                 <input class="form-control" type="text" placeholder="Điểm đi" name="diem_di"/>
@@ -19,26 +19,31 @@
         <button style="margin-top: 10px;margin-bottom: 20px" class="btn btn-danger">Tìm kiếm</button>
     </form>
 
-    <table class="table">
-        <tr>
-            <th></th>
-            <th>Điểm đi</th>
-            <td>Điểm đến</td>
-            <td>Ngày đi</td>
-            <td>Giờ bay</td>
-            <td></td>
-        </tr>
-        {% if flights %}
-            {% for f in flights %}
+    <form action="{{ url_for('book_tickets') }}", method="post">
+        <table class="table">
             <tr>
-                <td></td>
-                <td>{{ f.departure_airport }}</td>
-                <td>{{ f.arrival_airport }}</td>
-                <td>{{ f.departure_day}}</td>
-                <td>{{ f.flight_time }}</td>
-                <td><a href="#"><button class="btn btn-danger">Chọn</button></a></td>
+                <th></th>
+                <th>Mã chuyến bay</th>
+                <th>Điểm đi</th>
+                <th>Điểm đến</th>
+                <th>Ngày đi</th>
+                <th>Giờ bay</th>
+                <th>Giá</th>
             </tr>
-            {% endfor %}
-        {% endif %}
-    </table>
+            {% if flights %}
+                {% for f in flights %}
+                <tr>
+                    <td></td>
+                    <td>{{f.id}}</td>
+                    <td>{{ f.departure_airport }}</td>
+                    <td>{{ f.arrival_airport }}</td>
+                    <td>{{ f.departure_day}}</td>
+                    <td>{{ f.flight_time }}</td>
+                    <td>{{ f.price }}</td>
+                    <td><button class="btn btn-danger" value="{{f.id}}" name="btn-chon">Chọn</button></td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </form>
 </div>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Xác nhận đặt vé</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <h1>Xác nhận đặt vé</h1>
+
+    <form action="{{ url_for('confirm_ticket') }}", method="post">
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>Mã phiếu đặt chỗ</th>
+                <th>Loại vé</th>
+                <th>Giá</th>
+                <th>Mã chuyến bay</th>
+                <th>Ngày đi</th>
+                <th>Giờ bay</th>
+                <th>Tên khách hàng</th>
+                <th>SĐT</th>
+                <th>Trạng thái</th>
+            </tr>
+            {% if book_ticket %}
+                {% for b in book_ticket %}
+                    {% if b.status == False %}
+                        <tr>
+                            <td></td>
+                            <td>{{ b.id_book_ticket }}</td>
+                            <td>{{ b.type }}</td>
+                            <td>{{ b.price }}</td>
+                            <td>{{ b.id_flight }}</td>
+                            <td>{{ b.departure_day}}</td>
+                            <td>{{ b.flight_time }}</td>
+                            <td>{{ b.name }}</td>
+                            <td>{{ b.phone }}</td>
+                            <td>{{ b.status }}</td>
+                            <td><button class="btn btn-danger" value="{{ b.id_book_ticket }}" name="btn-confirm-ticket">Xác nhận</button></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </table>
+    </form>
+</body>
+</html>

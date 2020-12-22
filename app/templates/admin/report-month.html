@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Báo cáo tháng</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <h1>Báo cáo tháng</h1>
+    </br>
+    <table class="table">
+            <tr>
+                <th></th>
+                <th>Số thứ tự</th>
+                <th>Chuyến bay</th>
+                <th>Số vé</th>
+                <th>Tỷ lệ</th>
+                <th>Doanh thu</th>
+            </tr>
+            {% if report_month %}
+                    {% for r in report_month %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>{{ r.id }}</td>
+                        <td>{{ r.SoVe }}</td>
+                        <td></td>
+                        <td>{{ r.DoanhThu }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+        </table>
+</body>
+</html>

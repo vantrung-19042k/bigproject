@@ -43,6 +43,10 @@ class Customer(db.Model):
     address = Column(String(50), nullable=False)
 
     airticket = relationship('AirTicket', backref='customer', lazy=True)
+    bookticket = relationship('BookTicket', backref='customer', lazy=True)
+
+    def __str__(self):
+        return self.name
 
 
 # management employee
@@ -57,6 +61,12 @@ class Employee(db.Model):
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     airticket = relationship('AirTicket', backref='employee', lazy=True)
 
+    # report_month = relationship('ReportMonth', backref='employee', lazy=True)
+    # report_year = relationship('ReportYear', backref='employee', lazy=True)
+
+    def __str__(self):
+        return self.name
+
 
 # management flight
 class Plane(db.Model):
@@ -70,6 +80,7 @@ class Plane(db.Model):
     total_seat = Column(Integer, nullable=False)
 
     flights = relationship('Flight', backref='plane', lazy=True)
+    seats = relationship('Seat', backref='plane', lazy=True)
 
     def __str__(self):
         return self.name
@@ -110,6 +121,7 @@ class Flight(db.Model):
 
     departure_day = Column(Date, nullable=False)
     flight_time = Column(String(50), nullable=False)
+    price = Column(Float, nullable=False)
 
     plane_id = Column(Integer, ForeignKey(Plane.id), nullable=False)
     departure_airport_id = Column(Integer, ForeignKey(Airport.id), nullable=False)
@@ -120,35 +132,79 @@ class Flight(db.Model):
     arrival_airport = relationship('Airport', foreign_keys=[arrival_airport_id])
 
     air_tickets = relationship('AirTicket', backref='flight', lazy=True)
+    book_tickets = relationship('BookTicket', backref='flight', lazy=True)
 
     def __str__(self):
         return self.name
 
 
 # management ticket info
+
+
+# chỗ ngồi
 class Seat(db.Model):
     __tablename__ = 'seat'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
     status = Column(Boolean, nullable=False)
 
+    # book_ticket = relationship('BookTicket', backref='seat', uselist=False)
+    air_ticket = relationship('AirTicket', backref='seat', uselist=False)
+    plane_id = Column(Integer, ForeignKey(Plane.id), nullable=False)
 
+    def __str__(self):
+        return self.name
+
+
+# thông tin đặt đỗ của khách hàng
+class BookTicket(db.Model):
+    __tablename__ = 'book_ticket'
+
+    id = Column(Integer, primary_key=True)
+    type = Column(String(50), nullable=False)
+    price = Column(Float(10), nullable=False)
+    status = Column(Boolean, default=False)
+
+    # seat_id = Column(Integer, ForeignKey(Seat.id), nullable=False)
+
+    customer_id = Column(Integer, ForeignKey(Customer.id), nullable=False)
+    flight_id = Column(Integer, ForeignKey(Flight.id), nullable=False)
+
+
+# vé bán
 class AirTicket(db.Model):
     __tablename__ = 'airticket'
-    id = Column(Integer, ForeignKey(Seat.id), primary_key=True)
+    id = Column(Integer, primary_key=True)
     type = Column(String(50), nullable=False)
     price = Column(Float(10), nullable=False)
     date = Column(Date, nullable=False)
+
+    seat_id = Column(Integer, ForeignKey(Seat.id), nullable=False)
 
     employee_id = Column(Integer, ForeignKey(Employee.id), nullable=False)
     customer_id = Column(Integer, ForeignKey(Customer.id), nullable=False)
     flight_id = Column(Integer, ForeignKey(Flight.id), nullable=False)
 
 
-plane_seat = db.Table('plane_seat',
-                      Column('plane_id', Integer, ForeignKey(Plane.id), primary_key=True),
-                      Column('seat_id', Integer, ForeignKey(Seat.id), primary_key=True)
-                      )
+# báo cáo thống kê
+# class ReportMonth(db.Model):
+#     __tablename__ = 'report_month'
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     total_ticket = Column(String(50), nullable=False)
+#     sales = Column(String(50), nullable=False)
+#     flight = Column(String(50), nullable=False)
+#     # flight_id = Column(Integer, ForeignKey(Flight.id), nullable=False)
+#     employee_id = Column(Integer, ForeignKey(Employee.id), nullable=False)
+#
+#
+# class ReportYear(db.Model):
+#     __tablename__ = 'report_year'
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     month = Column(String(50), nullable=False)
+#     total_flight = Column(String(50), nullable=False)
+#     sales = Column(String(50), nullable=False)
+#     employee_id = Column(Integer, ForeignKey(Employee.id), nullable=False)
+
 
 if __name__ == "__main__":
     db.create_all()

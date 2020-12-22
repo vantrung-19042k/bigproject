@@ -1,10 +1,11 @@
 import hashlib
 
-from flask import render_template, request, redirect
-from flask_login import login_user
+from flask import render_template, request, redirect, g
+from flask_login import login_user, current_user
 
 from app.models import *
-from app import app, login, admins, utils
+from app import app, login, admins, utils, decorator
+from datetime import date
 
 
 @app.route('/')
@@ -89,6 +90,126 @@ def search_flight():
         msg = "Vui lòng nhập đầy đủ thông tin"
 
     return render_template('base/search-flight.html', flights=flights, msg=msg)
+
+
+@app.route('/book-tickets', methods=['get', 'post'])
+def book_tickets():
+    id_flight = None
+    flights = None
+
+    if request.method == 'POST':
+        id_flight = request.form.get('btn-chon')
+        flights = utils.read_data_flight_by_id(id_flight=id_flight)
+
+    return render_template('base/book-tickets.html', flights=flights)
+
+
+@app.route('/book-tickets-result', methods=['post', 'get'])
+def book_tickets_result():
+    id_flight = None
+    name = None
+    phone = None
+    cmnd = None
+    dia_chi = None
+    loai_ve = None
+
+    msg = ''
+
+    if request.method == 'POST':
+        id_flight = request.form.get('btn-xacnhan')
+        name = request.form.get('name')
+        phone = request.form.get('phone')
+        identity_card = request.form.get('cmnd')
+        address = request.form.get('dia_chi')
+        type = request.form.get('loai_ve')
+
+        if utils.add_customer_info(name=name, phone=phone, identity_card=identity_card, address=address):
+            customer = utils.read_data_customer_by_phone(phone=phone)
+            flight = utils.read_data_flight_by_id(id_flight=id_flight)
+
+            if utils.add_book_ticket_info(type=type, price=flight.price, customer_id=customer.id, flight_id=flight.id):
+                return render_template('base/book-tickets-result.html', msg='Đặt vé thành công')
+            else:
+                return render_template('base/book-tickets-result.html', msg='Đặt vé thất bại')
+
+    return render_template('base/book-tickets-result.html')
+
+
+@app.route('/confirm-ticket', methods=['get', 'post'])
+def confirm_ticket():
+    msg = ''
+
+    id_book_ticket = None
+
+    ticket_type = None
+    price = None
+    ticket_date = None
+    customer_id = None
+    employee_id = None
+    flight_id = None
+    seat_id = None
+
+    seat_data = None
+
+    book_ticket = utils.read_data_book_ticket()
+
+    if request.method == 'POST':
+        id_book_ticket = request.form.get('btn-confirm-ticket')
+
+        data_book_ticket = utils.read_data_book_ticket_by_id(id_book_ticket=id_book_ticket)
+
+        ticket_type = data_book_ticket.type
+        price = data_book_ticket.price
+        ticket_date = date.today()
+        customer_id = data_book_ticket.customer_id
+        employee_id = current_user.get_id()
+        flight_id = data_book_ticket.flight_id
+
+        # xếp vào một ghế ngẫu nhiên
+        # seat_id = data_book_ticket.id
+
+        data_flight = utils.read_data_flight_by_id(flight_id)
+        plane_id = data_flight.plane_id
+
+        data_seat = utils.read_data_seat(plane_id)
+
+        for s in data_seat:
+            if not s.status:
+                seat_id = s.id
+                break
+
+        if utils.add_ticket(type=ticket_type, price=price, date=ticket_date,
+                            customer_id=customer_id, employee_id=employee_id, flight_id=flight_id,
+                            seat_id=seat_id):
+            utils.update_data_seat(seat_id)
+            utils.update_data_book_ticket(book_ticket_id=id_book_ticket)
+            return render_template('base/confirm-tickets-result.html', msg='Xác nhận đặt vé thành công')
+        else:
+            return render_template('base/confirm-tickets-result.html', msg='Xác nhận đặt vé thất bại')
+
+        # if current_user.is_authenticated:
+        #     user_id = current_user.get_id()``
+        #     print(user_id)
+        #     today = date.today()
+        #     print(today)
+
+    return render_template('base/confirm-tickets.html', book_ticket=book_ticket)
+
+
+@app.route('/report-month')
+def report_month():
+
+    report_month = utils.read_data_report_month()
+
+    return render_template('base/report-month.html', report_month=report_month)
+
+
+@app.route('/report-year')
+def report_year():
+
+    report_year = utils.read_data_report_year()
+
+    return render_template('base/report-year.html', report_year=report_year)
 
 
 if __name__ == '__main__':
