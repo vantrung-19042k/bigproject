@@ -39,21 +39,21 @@
         <form action="{{ url_for('book_tickets_result') }}" , method="post">
             <div class="row" style="margin-top: 15px">
                 <div class="col-md-4">
-                    <input id="height-input" class="form-control" type="text" placeholder="Họ và tên" name="name"/>
+                    <input id="height-input" class="form-control" type="text" placeholder="Họ và tên" name="name" required/>
                 </div>
                 <div class="col-md-4">
-                    <input id="height-input" class="form-control" type="text" placeholder="Số điện thoại" name="phone"/>
+                    <input id="height-input" class="form-control" type="text" placeholder="Số điện thoại" name="phone" required/>
                 </div>
                 <div class="col-md-4">
-                    <input id="height-input" class="form-control" type="text" placeholder="CMND" name="cmnd"/>
+                    <input id="height-input" class="form-control" type="text" placeholder="CMND" name="cmnd" required/>
                 </div>
                 <div class="col-md-4">
                     <input id="height-input" style="margin-top: 20px" class="form-control" type="text" placeholder="Địa chỉ"
-                           name="dia_chi"/>
+                           name="dia_chi" required/>
                 </div>
                 <div class="col-md-4">
                     <input id="height-input" style="margin-top: 20px" class="form-control" type="text" placeholder="Loại vé"
-                           name="loai_ve"/>
+                           name="loai_ve" required/>
                 </div>
                 <div class="col-md-4">
                     <button style="margin-top: 20px; font-size: 18px" class="btn btn-danger" value="{{ flights.id }}"
