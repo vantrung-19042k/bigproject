@@ -106,6 +106,10 @@ def book_tickets():
 
 @app.route('/book-tickets-result', methods=['post', 'get'])
 def book_tickets_result():
+    wait_time = 3000
+    seconds = wait_time / 1000
+    redirect_url = '/'
+
     id_flight = None
     name = None
     phone = None
@@ -128,15 +132,25 @@ def book_tickets_result():
             flight = utils.read_data_flight_by_id(id_flight=id_flight)
 
             if utils.add_book_ticket_info(type=type, price=flight.price, customer_id=customer.id, flight_id=flight.id):
-                return render_template('base/book-tickets-result.html', msg='Đặt vé thành công')
+                # return render_template('base/book-tickets-result.html', msg='Đặt vé thành công')
+                return f"<html><body><h1>Đặt vé thành công, chuyển hướng sau {seconds} seconds</h1>" \
+                       f"<script>var timer = setTimeout(function() {{window.location='{redirect_url}'}}, " \
+                       f"{wait_time});</script></body></html>"
             else:
-                return render_template('base/book-tickets-result.html', msg='Đặt vé thất bại')
+                # return render_template('base/book-tickets-result.html', msg='Đặt vé thất bại')
+                return f"<html><body><h1>Đặt vé thất bại, chuyển hướng sau {seconds} seconds</h1>" \
+                       f"<script>var timer = setTimeout(function() {{window.location='{redirect_url}'}}, " \
+                       f"{wait_time});</script></body></html>"
 
     return render_template('base/book-tickets-result.html')
 
 
 @app.route('/confirm-ticket', methods=['get', 'post'])
 def confirm_ticket():
+    wait_time = 3000
+    seconds = wait_time / 1000
+    redirect_url = '/admin/confirmticket/'
+
     msg = ''
 
     id_book_ticket = None
@@ -183,9 +197,15 @@ def confirm_ticket():
                             seat_id=seat_id):
             utils.update_data_seat(seat_id)
             utils.update_data_book_ticket(book_ticket_id=id_book_ticket)
-            return render_template('base/confirm-tickets-result.html', msg='Xác nhận đặt vé thành công')
+            # return render_template('base/confirm-tickets-result.html', msg='Xác nhận đặt vé thành công')
+            return f"<html><body><h1>Xác nhận đặt vé thành công, chuyển hướng sau {seconds} seconds</h1>" \
+                   f"<script>var timer = setTimeout(function() {{window.location='{redirect_url}'}}, " \
+                   f"{wait_time});</script></body></html>"
         else:
-            return render_template('base/confirm-tickets-result.html', msg='Xác nhận đặt vé thất bại')
+            # return render_template('base/confirm-tickets-result.html', msg='Xác nhận đặt vé thất bại')
+            return f"<html><body><h1>Xác nhận đặt vé thành công, chuyển hướng sau {seconds} seconds</h1>" \
+               f"<script>var timer = setTimeout(function() {{window.location='{redirect_url}'}}, " \
+               f"{wait_time});</script></body></html>"
 
         # if current_user.is_authenticated:
         #     user_id = current_user.get_id()``

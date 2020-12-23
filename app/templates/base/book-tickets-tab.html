@@ -1,0 +1,57 @@
+<h1 id="cus-h1" class="text-center text-info">Đặt vé chuyến bay</h1>
+
+<br/>
+<div class="container">
+    <h3 class="text-danger">1. Thông tin chuyến bay</h3>
+    <h6 class="text-danger">*** Kiểm tra thông tin vé đặt ***</h6>
+    <table class="table table-hover" style="margin-top: 15px">
+        <tr class="table-primary" style="font-size: 18px">
+            <th class="text-center">Mã chuyến bay</th>
+            <th class="text-center">Điểm đi</th>
+            <th class="text-center">Điểm đến</th>
+            <th class="text-center">Ngày đi</th>
+            <th class="text-center">Giờ bay</th>
+        </tr>
+        {% if flights %}
+            <tr style="font-size: 15px">
+                <td class="text-center">{{ flights.id }}</td>
+                <td class="text-center">{{ flights.departure_airport }}</td>
+                <td class="text-center">{{ flights.arrival_airport }}</td>
+                <td class="text-center">{{ flights.departure_day }}</td>
+                <td class="text-center">{{ flights.flight_time }}</td>
+            </tr>
+        {% endif %}
+    </table>
+
+    <br/>
+
+    <h3 class="text-danger">2. Thông tin khách hàng *</h3>
+    <form action="{{ url_for('book_tickets_result') }}" , method="post">
+        <div class="row" style="margin-top: 15px">
+            <div class="col-md-4">
+                <input id="height-input" class="form-control" type="text" placeholder="Họ và tên" name="name"/>
+            </div>
+            <div class="col-md-4">
+                <input id="height-input" class="form-control" type="text" placeholder="Số điện thoại" name="phone"/>
+            </div>
+            <div class="col-md-4">
+                <input id="height-input" class="form-control" type="text" placeholder="CMND" name="cmnd"/>
+            </div>
+            <div class="col-md-4">
+                <input id="height-input" style="margin-top: 20px" class="form-control" type="text" placeholder="Địa chỉ"
+                       name="dia_chi"/>
+            </div>
+            <div class="col-md-4">
+                <input id="height-input" style="margin-top: 20px" class="form-control" type="text" placeholder="Loại vé"
+                       name="loai_ve"/>
+            </div>
+            <div class="col-md-4">
+                <button style="margin-top: 20px; font-size: 18px" class="btn btn-danger" value="{{ flights.id }}"
+                        name="btn-xacnhan">
+                    Xác Nhận Đặt Vé
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
