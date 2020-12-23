@@ -176,6 +176,6 @@ def read_data_report_year(year):
         .add_columns(func.count(AirTicket.id).label('SoChuyenBay'),
                      func.sum(AirTicket.price).label('DoanhThu'),
                      (extract('month', AirTicket.date)).label('thang')) \
-        .group_by(AirTicket.date) \
+        .group_by(extract('month', AirTicket.date)) \
         .all()
     return report_year
