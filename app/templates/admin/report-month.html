@@ -6,7 +6,7 @@
     <form class="form-group" action="{{ url_for('reportmonth.report_month') }}" method="post">
         <input class="form-control" type="text" placeholder="Nhập tháng cần hiển thị báo cáo" name="month_name">
         <br>
-        <button class="btn btn-primary">Hiển thị</button>
+        <button class="btn btn-danger">Hiển thị</button>
     </form>
 
     {% if month_name %}
