@@ -23,8 +23,8 @@ class UserView(ModelView):
     #     "password": PasswordField("Password", validators=[validators.data_required(),
     #                                                       validators.length(min=8, max=100)])}
 
-    # def is_accessible(self):
-    #     return current_user.is_authenticated
+    def is_accessible(self):
+        return current_user.is_authenticated
 
 
 class SubModelView(ModelView):
@@ -36,8 +36,8 @@ class SubModelView(ModelView):
     # kiem tra trang thai dang nhap cua user
     # neu đã đăng nhập mới hiển thị các view
 
-    # def is_accessible(self):
-    #     return current_user.is_authenticated
+    def is_accessible(self):
+        return current_user.is_authenticated
 
 
 class ReportView(ModelView):
@@ -114,14 +114,14 @@ class Contact(BaseView):
 
     # kiem tra trang thai dang nhap cua user
     # neu đã đăng nhập mới hiển thị các view
-    # def is_accessible(self):
-    #     return current_user.is_authenticated
+    def is_accessible(self):
+        return current_user.is_authenticated
 
 
 class ConfirmTicket(BaseView):
     @expose('/')
     def confirm_ticket(self):
-        wait_time = 3000
+        wait_time = 1000
         seconds = wait_time / 1000
         redirect_url = '/admin/confirmticket/'
 
@@ -187,6 +187,9 @@ class ConfirmTicket(BaseView):
 
         return self.render('base/confirm-tickets.html', book_ticket=book_ticket)
 
+    def is_accessible(self):
+        return current_user.is_authenticated
+
 
 class ReportMonth(BaseView):
     @expose('/', methods=['get', 'post'])
@@ -199,6 +202,9 @@ class ReportMonth(BaseView):
         report_month = utils.read_data_report_month(month_name)
 
         return self.render('admin/report-month.html', report_month=report_month, month_name=month_name)
+
+    def is_accessible(self):
+        return current_user.is_authenticated
 
 
 class ReportYear(BaseView):
@@ -215,6 +221,9 @@ class ReportYear(BaseView):
 
         return self.render('admin/report-year.html', report_year=report_year, year_name=year_name)
 
+    def is_accessible(self):
+        return current_user.is_authenticated
+
 
 # tao view xu li logout
 class LogoutView(BaseView):
@@ -223,8 +232,8 @@ class LogoutView(BaseView):
         logout_user()
         return redirect('/admin')
 
-    # def is_accessible(self):
-    #     return current_user.is_authenticated
+    def is_accessible(self):
+        return current_user.is_authenticated
 
 
 # tao view xu li sign up

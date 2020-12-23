@@ -106,7 +106,7 @@ def book_tickets():
 
 @app.route('/book-tickets-result', methods=['post', 'get'])
 def book_tickets_result():
-    wait_time = 3000
+    wait_time = 1000
     seconds = wait_time / 1000
     redirect_url = '/'
 
@@ -147,7 +147,7 @@ def book_tickets_result():
 
 @app.route('/confirm-ticket', methods=['get', 'post'])
 def confirm_ticket():
-    wait_time = 3000
+    wait_time = 1000
     seconds = wait_time / 1000
     redirect_url = '/admin/confirmticket/'
 
@@ -203,7 +203,7 @@ def confirm_ticket():
                    f"{wait_time});</script></body></html>"
         else:
             # return render_template('base/confirm-tickets-result.html', msg='Xác nhận đặt vé thất bại')
-            return f"<html><body><h1>Xác nhận đặt vé thành công, chuyển hướng sau {seconds} seconds</h1>" \
+            return f"<html><body><h1>Xác nhận đặt vé thất bại, chuyển hướng sau {seconds} seconds</h1>" \
                f"<script>var timer = setTimeout(function() {{window.location='{redirect_url}'}}, " \
                f"{wait_time});</script></body></html>"
 
