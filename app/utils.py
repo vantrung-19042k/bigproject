@@ -154,9 +154,9 @@ def update_data_book_ticket(book_ticket_id):
 
 
 # lấy dữ liệu báo cáo tháng
-def read_data_report_month():
+def read_data_report_month(month):
     report_month = AirTicket.query.join(Flight, AirTicket.flight_id == Flight.id) \
-        .filter(extract('month', AirTicket.date) == 12) \
+        .filter(extract('month', AirTicket.date) == month) \
         .add_columns(func.count(AirTicket.id).label('SoVe'),
                      func.sum(AirTicket.price).label('DoanhThu'),
                      Flight.id,
@@ -170,9 +170,9 @@ def read_data_report_month():
 
 
 # lấy dữ liệu báo cáo năm
-def read_data_report_year():
+def read_data_report_year(year):
     report_year = AirTicket.query.join(Flight, AirTicket.flight_id == Flight.id) \
-        .filter(extract('year', AirTicket.date) == 2020) \
+        .filter(extract('year', AirTicket.date) == year) \
         .add_columns(func.count(AirTicket.id).label('SoChuyenBay'),
                      func.sum(AirTicket.price).label('DoanhThu'),
                      (extract('month', AirTicket.date)).label('thang')) \

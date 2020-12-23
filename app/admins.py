@@ -181,18 +181,31 @@ class ConfirmTicket(BaseView):
 
 
 class ReportMonth(BaseView):
-    @expose('/')
+    @expose('/', methods=['get', 'post'])
     def report_month(self):
-        report_month = utils.read_data_report_month()
-        return self.render('admin/report-month.html', report_month=report_month)
+        month_name = None
+
+        if request.method == 'POST':
+            month_name = request.form.get('month_name')
+
+        report_month = utils.read_data_report_month(month_name)
+
+        return self.render('admin/report-month.html', report_month=report_month, month_name=month_name)
 
 
 class ReportYear(BaseView):
-    @expose('/')
+    @expose('/', methods=['get', 'post'])
     def report_year(self):
-        report_year = utils.read_data_report_year()
+        year_name = None
 
-        return self.render('admin/report-year.html', report_year=report_year)
+        if request.method == 'POST':
+            year_name = request.form.get('year_name')
+
+        report_month = utils.read_data_report_month(year_name)
+
+        report_year = utils.read_data_report_year(year_name)
+
+        return self.render('admin/report-year.html', report_year=report_year, year_name=year_name)
 
 
 # tao view xu li logout

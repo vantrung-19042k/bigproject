@@ -5,6 +5,17 @@
     </script>
 
     <h2 class="text-center">Báo cáo năm</h2>
+
+    <form class="form-group" action="{{ url_for('reportyear.report_year') }}" method="post">
+        <input class="form-control" type="text" placeholder="Nhập năm cần hiển thị báo cáo" name="year_name">
+        <br>
+        <button class="btn btn-primary">Hiển thị</button>
+    </form>
+
+    {% if year_name %}
+        <h2>Thông tin báo cáo tháng: {{ year_name }}</h2>
+    {% endif %}
+
     </br>
     <table class="table table-bordered table-hover">
             <tr>
