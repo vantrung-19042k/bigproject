@@ -1,34 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Báo cáo tháng</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-<body>
-    <h1>Báo cáo tháng</h1>
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <h2 class="text-center">Báo cáo tháng</h2>
+
+    <form class="form-group" action="{{ url_for('reportmonth.report_month') }}" method="post">
+        <input class="form-control" type="text" placeholder="Nhập tháng cần hiển thị báo cáo" name="month_name">
+        <br>
+        <button class="btn btn-primary">Hiển thị</button>
+    </form>
+
+    {% if month_name %}
+        <h2>Thông tin báo cáo tháng: {{ month_name }}</h2>
+    {% endif %}
+
     </br>
-    <table class="table">
-            <tr>
-                <th></th>
-                <th>Số thứ tự</th>
-                <th>Chuyến bay</th>
-                <th>Số vé</th>
-                <th>Tỷ lệ</th>
-                <th>Doanh thu</th>
-            </tr>
-            {% if report_month %}
-                    {% for r in report_month %}
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>{{ r.id }}</td>
-                        <td>{{ r.SoVe }}</td>
-                        <td></td>
-                        <td>{{ r.DoanhThu }}</td>
-                    </tr>
-                    {% endfor %}
-                {% endif %}
-        </table>
-</body>
-</html>
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th class="text-center">Mã chuyến bay</th>
+            <th class="text-center">Tên chuyến bay</th>
+            <th class="text-center">Ngày bay</th>
+            <th class="text-center">Giờ bay</th>
+            <th class="text-center">Số vé</th>
+            <th class="text-center">Doanh thu</th>
+        </tr>
+        {% if report_month %}
+                {% for r in report_month %}
+                <tr>
+                    <td class="text-center">{{ r.id }}</td>
+                    <td class="text-center">{{ r.name }}</td>
+                    <td class="text-center">{{ r.departure_day }}</td>
+                    <td class="text-center">{{ r.flight_time }}</td>
+                    <td class="text-center">{{ r.SoVe }}</td>
+                    <td class="text-center">{{ r.DoanhThu }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+    </table>
+{% endblock %}
+
