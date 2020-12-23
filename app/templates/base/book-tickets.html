@@ -3,57 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Book Tickets</title>
+    <link href="{{ url_for('static', filename='images/logo2.png') }}" rel="shortcut icon" type="image/icon" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}"/>
 </head>
 <body>
-    <h1>Đặt vé chuyến bay</h1>
+    <h1 class="text-center text-info">Đặt vé chuyến bay</h1>
 
     <br/>
+    <div class="container">
+        <h3 class="text-danger">1. Thông tin chuyến bay</h3>
+        <h6 class="text-danger">*** Kiểm tra thông tin vé đặt ***</h6>
+        <table class="table table-hover" style="margin-top: 15px">
+            <tr class="table-primary" style="font-size: 18px">
+                <th class="text-center">Mã chuyến bay</th>
+                <th class="text-center">Điểm đi</th>
+                <th class="text-center">Điểm đến</th>
+                <th class="text-center">Ngày đi</th>
+                <th class="text-center">Giờ bay</th>
+            </tr>
+            {% if flights %}
+                <tr style="font-size: 15px">
+                    <td class="text-center">{{ flights.id }}</td>
+                    <td class="text-center">{{ flights.departure_airport }}</td>
+                    <td class="text-center">{{ flights.arrival_airport }}</td>
+                    <td class="text-center">{{ flights.departure_day }}</td>
+                    <td class="text-center">{{ flights.flight_time }}</td>
+                </tr>
+            {% endif %}
+        </table>
 
-    <h4 >Thông tin chuyến bay</h4>
-    <table class="table">
-        <tr>
-            <th></th>
-            <th>Mã chuyến bay</th>
-            <th>Điểm đi</th>
-            <td>Điểm đến</td>
-            <td>Ngày đi</td>
-            <td>Giờ bay</td>
-            <td></td>
-        </tr>
-        {% if flights %}
-            <td></td>
-            <td>{{flights.id}}</td>
-            <td>{{ flights.departure_airport }}</td>
-            <td>{{ flights.arrival_airport }}</td>
-            <td>{{ flights.departure_day}}</td>
-            <td>{{ flights.flight_time }}</td>
-        {% endif %}
-    </table>
+        <br/>
 
-    <br/>
+        <h3 class="text-danger">2. Thông tin khách hàng *</h3>
+        <form action="{{ url_for('book_tickets_result') }}" , method="post">
+            <div class="row" style="margin-top: 15px">
+                <div class="col-md-4">
+                    <input id="height-input" class="form-control" type="text" placeholder="Họ và tên" name="name"/>
+                </div>
+                <div class="col-md-4">
+                    <input id="height-input" class="form-control" type="text" placeholder="Số điện thoại" name="phone"/>
+                </div>
+                <div class="col-md-4">
+                    <input id="height-input" class="form-control" type="text" placeholder="CMND" name="cmnd"/>
+                </div>
+                <div class="col-md-4">
+                    <input id="height-input" style="margin-top: 20px" class="form-control" type="text" placeholder="Địa chỉ"
+                           name="dia_chi"/>
+                </div>
+                <div class="col-md-4">
+                    <input id="height-input" style="margin-top: 20px" class="form-control" type="text" placeholder="Loại vé"
+                           name="loai_ve"/>
+                </div>
+                <div class="col-md-4">
+                    <button style="margin-top: 20px; font-size: 18px" class="btn btn-danger" value="{{ flights.id }}"
+                            name="btn-xacnhan">
+                        Xác Nhận Đặt Vé
+                    </button>
+                </div>
+            </div>
 
-    <h4>Nhập thông tin khách hàng</h4>
-    <form action="{{ url_for('book_tickets_result') }}", method="post">
-        <div class="row">
-            <div class="col-md-6">
-                <input class="form-control" type="text" placeholder="Họ và tên" name="name"/>
-            </div>
-             <div class="col-md-6">
-                <input class="form-control" type="text" placeholder="Số điện thoại" name="phone"/>
-            </div>
-            <div class="col-md-6">
-                <input style="margin-top: 10px" class="form-control" type="text" placeholder="CMND" name="cmnd"/>
-            </div>
-             <div class="col-md-6">
-                <input style="margin-top: 10px" class="form-control" type="text" placeholder="Địa chỉ" name="dia_chi"/>
-            </div>
-            <div class="col-md-6">
-                <input style="margin-top: 10px" class="form-control" type="text" placeholder="Loại vé" name="loai_ve"/>
-            </div>
-        </div>
-        <button style="margin-top: 10px;margin-bottom: 20px" class="btn btn-danger" value="{{ flights.id }}" name="btn-xacnhan">
-            Xác nhận đặt vé</button>
-    </form>
+        </form>
+    </div>
+
 </body>
 </html>

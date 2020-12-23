@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Kết quả đặt vé</title>
+    <link href="{{ url_for('static', filename='images/logo2.png') }}" rel="shortcut icon" type="image/icon" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
 </head>
 <body>
-    <h1>Kết quả đặt vé</h1>
+    <h1 class="text-center text-danger">Kết quả đặt vé</h1>
     {% if msg %}
-        <h2>{{ msg }}</h2>
+        <h2 class="text-center text-danger">{{ msg }}</h2>
     {% endif %}
 </body>
 </html>

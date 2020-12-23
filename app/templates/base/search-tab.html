@@ -1,45 +1,43 @@
-<h1 class="text-center">Tìm kiếm chuyến bay</h1>
+<h1 id="cus-h1" class="text-center text-info">Tìm kiếm chuyến bay</h1>
 {% if msg %}
-    <h2 class="text-center">{{ msg }}</h2>
+    <h4 class="text-center text-danger">*** {{ msg }} ***</h4>
 {% endif %}
 
-<div class="container">
+<div id="cus-h1" class="container">
     <form action="{{ url_for('search_flight') }}">
         <div class="row">
-            <div class="col-md-6">
-                <input class="form-control" type="text" placeholder="Điểm đi" name="diem_di"/>
+            <div class="col-md-4">
+                <input id="height-input" class="form-control" type="text" placeholder="Điểm đi" name="diem_di"/>
             </div>
-             <div class="col-md-6">
-                <input class="form-control" type="text" placeholder="Điểm đến" name="diem_den"/>
+             <div class="col-md-4">
+                <input id="height-input" class="form-control" type="text" placeholder="Điểm đến" name="diem_den"/>
             </div>
-            <div class="col-md-6">
-                <input style="margin-top: 10px" class="form-control" type="date" placeholder="Ngày đi" name="ngay_di"/>
+            <div class="col-md-4">
+                <input id="height-input" class="form-control" type="date" placeholder="DD/MM/YYYY" name="ngay_di"/>
             </div>
         </div>
-        <button style="margin-top: 10px;margin-bottom: 20px" class="btn btn-danger">Tìm kiếm</button>
+        <button style="margin-top: 20px;margin-bottom: 20px; font-size: 20px" class="btn btn-danger col-md-2">Tìm Kiếm</button>
     </form>
 
     <form action="{{ url_for('book_tickets') }}", method="post">
-        <table class="table">
-            <tr>
-                <th></th>
-                <th>Mã chuyến bay</th>
-                <th>Điểm đi</th>
-                <th>Điểm đến</th>
-                <th>Ngày đi</th>
-                <th>Giờ bay</th>
-                <th>Giá</th>
+        <table class="table table-hover table-striped">
+            <tr style="font-size: 18px">
+                <th class="text-center">Mã chuyến bay</th>
+                <th class="text-center">Điểm đi</th>
+                <th class="text-center">Điểm đến</th>
+                <th class="text-center">Ngày đi</th>
+                <th class="text-center">Giờ bay</th>
+                <th class="text-center">Giá</th>
             </tr>
             {% if flights %}
                 {% for f in flights %}
-                <tr>
-                    <td></td>
-                    <td>{{f.id}}</td>
-                    <td>{{ f.departure_airport }}</td>
-                    <td>{{ f.arrival_airport }}</td>
-                    <td>{{ f.departure_day}}</td>
-                    <td>{{ f.flight_time }}</td>
-                    <td>{{ f.price }}</td>
+                <tr style="font-size: 15px">
+                    <td class="text-center">{{f.id}}</td>
+                    <td class="text-center">{{ f.departure_airport }}</td>
+                    <td class="text-center">{{ f.arrival_airport }}</td>
+                    <td class="text-center">{{ f.departure_day}}</td>
+                    <td class="text-center">{{ f.flight_time }}</td>
+                    <td class="text-center">{{ f.price }}</td>
                     <td><button class="btn btn-danger" value="{{f.id}}" name="btn-chon">Chọn</button></td>
                 </tr>
                 {% endfor %}
