@@ -1,11 +1,14 @@
+from datetime import date
+
+from app import db, admin, utils
+
+from flask import request, render_template
 from flask_login import current_user, logout_user
 from werkzeug.utils import redirect
 from wtforms import PasswordField, validators
 
-from app import db, admin, utils
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import BaseView, expose
-
 
 from app.models import *
 
@@ -103,6 +106,132 @@ class SeatView(SubModelView):
                          air_ticket='Vé bán', plane='Máy bay')
 
 
+# tao view rieng khong lien quan cac model
+class Contact(BaseView):
+    @expose('/')
+    def contact(self):
+        return self.render('admin/contact.html')
+
+    # kiem tra trang thai dang nhap cua user
+    # neu đã đăng nhập mới hiển thị các view
+    # def is_accessible(self):
+    #     return current_user.is_authenticated
+
+
+class ConfirmTicket(BaseView):
+    @expose('/')
+    def confirm_ticket(self):
+        msg = ''
+
+        id_book_ticket = None
+
+        ticket_type = None
+        price = None
+        ticket_date = None
+        customer_id = None
+        employee_id = None
+        flight_id = None
+        seat_id = None
+
+        seat_data = None
+
+        book_ticket = utils.read_data_book_ticket()
+
+        if request.method == 'POST':
+            id_book_ticket = request.form.get('btn-confirm-ticket')
+
+            data_book_ticket = utils.read_data_book_ticket_by_id(id_book_ticket=id_book_ticket)
+
+            ticket_type = data_book_ticket.type
+            price = data_book_ticket.price
+            ticket_date = date.today()
+            customer_id = data_book_ticket.customer_id
+            employee_id = current_user.get_id()
+            flight_id = data_book_ticket.flight_id
+
+            # xếp vào một ghế ngẫu nhiên
+            # seat_id = data_book_ticket.id
+
+            data_flight = utils.read_data_flight_by_id(flight_id)
+            plane_id = data_flight.plane_id
+
+            data_seat = utils.read_data_seat(plane_id)
+
+            for s in data_seat:
+                if not s.status:
+                    seat_id = s.id
+                    break
+
+            if utils.add_ticket(type=ticket_type, price=price, date=ticket_date,
+                                customer_id=customer_id, employee_id=employee_id, flight_id=flight_id,
+                                seat_id=seat_id):
+                utils.update_data_seat(seat_id)
+                utils.update_data_book_ticket(book_ticket_id=id_book_ticket)
+                return render_template('base/confirm-tickets-result.html', msg='Xác nhận đặt vé thành công')
+            else:
+                return render_template('base/confirm-tickets-result.html', msg='Xác nhận đặt vé thất bại')
+
+            # if current_user.is_authenticated:
+            #     user_id = current_user.get_id()``
+            #     print(user_id)
+            #     today = date.today()
+            #     print(today)
+
+        return self.render('base/confirm-tickets.html', book_ticket=book_ticket)
+
+
+class ReportMonth(BaseView):
+    @expose('/', methods=['get', 'post'])
+    def report_month(self):
+        month_name = None
+
+        if request.method == 'POST':
+            month_name = request.form.get('month_name')
+
+        report_month = utils.read_data_report_month(month_name)
+
+        return self.render('admin/report-month.html', report_month=report_month, month_name=month_name)
+
+
+class ReportYear(BaseView):
+    @expose('/', methods=['get', 'post'])
+    def report_year(self):
+        year_name = None
+
+        if request.method == 'POST':
+            year_name = request.form.get('year_name')
+
+        report_month = utils.read_data_report_month(year_name)
+
+        report_year = utils.read_data_report_year(year_name)
+
+        return self.render('admin/report-year.html', report_year=report_year, year_name=year_name)
+
+
+# tao view xu li logout
+class LogoutView(BaseView):
+    @expose('/')
+    def log_out(self):
+        logout_user()
+        return redirect('/admin')
+
+    # def is_accessible(self):
+    #     return current_user.is_authenticated
+
+
+# tao view xu li sign up
+# class SignUpView(BaseView):
+#     @expose('/')
+#     def sign_up(self):
+#         return self.render('admin/sign-up.html')
+#
+#     def is_accessible(self):
+#         return not current_user.is_authenticated
+#
+#
+# admin.add_view(SignUpView(name='Sign Up'))
+
+#Add view
 admin.add_view(CustomerView(Customer, db.session, name='Khách hàng', category='Quản lý người dùng'))
 admin.add_view(EmployeeView(Employee, db.session, name='Nhân viên', category='Quản lý người dùng'))
 admin.add_view(AirportView(Airport, db.session, name='Sân bay', category='Quản lý sân bay'))
@@ -117,66 +246,14 @@ admin.add_view(BookTicketView(BookTicket, db.session, name='Phiếu đặt chỗ
 # admin.add_view(ReportMonthView(ReportMonth, db.session, name='Báo cáo tháng', category='Báo cáo thống kê'))
 # admin.add_view(ReportYearView(ReportYear, db.session, name='Báo cáo năm', category='Báo cáo thống kê'))
 
-admin.add_view(UserView(User, db.session))
-
-
-# tao view rieng khong lien quan cac model
-class Contact(BaseView):
-    @expose('/')
-    def contact(self):
-        return self.render('admin/contact.html')
-
-    # kiem tra trang thai dang nhap cua user
-    # neu đã đăng nhập mới hiển thị các view
-    # def is_accessible(self):
-    #     return current_user.is_authenticated
-
-
-admin.add_view(Contact(name="Contact"))
-
-
-class ReportMonth(BaseView):
-    @expose('/')
-    def report_month(self):
-        report_month = utils.read_data_report_month()
-        return self.render('admin/report-month.html', report_month=report_month)
-
-
 admin.add_view(ReportMonth(name='Báo cáo tháng', category='Báo cáo'))
-
-
-class ReportYear(BaseView):
-    @expose('/')
-    def report_year(self):
-        report_year = utils.read_data_report_year()
-
-        return self.render('admin/report-year.html', report_year=report_year)
-
 
 admin.add_view(ReportYear(name='Báo cáo năm', category='Báo cáo'))
 
+admin.add_view(ConfirmTicket(name='Xác nhận đặt vé'))
 
-# tao view xu li logout
-class LogoutView(BaseView):
-    @expose('/')
-    def log_out(self):
-        logout_user()
-        return redirect('/admin')
+admin.add_view(UserView(User, db.session))
 
-    # def is_accessible(self):
-    #     return current_user.is_authenticated
-
+admin.add_view(Contact(name="Contact"))
 
 admin.add_view(LogoutView(name="Logout"))
-
-# tao view xu li sign up
-# class SignUpView(BaseView):
-#     @expose('/')
-#     def sign_up(self):
-#         return self.render('admin/sign-up.html')
-#
-#     def is_accessible(self):
-#         return not current_user.is_authenticated
-#
-#
-# admin.add_view(SignUpView(name='Sign Up'))
